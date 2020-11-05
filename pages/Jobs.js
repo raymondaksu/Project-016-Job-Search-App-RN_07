@@ -11,26 +11,43 @@ import Axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Modal from 'react-native-modal';
 import {WebView} from 'react-native-webview';
-import {JobItem} from '../components';
+import {JobItem, SearchBar} from '../components';
 import {jobs} from '../styles';
 
 const Jobs = (props) => {
   const {selectedLanguage} = props.route.params;
   const [data, setData] = useState([]);
+  const [displayData, setDisplayData] = useState([]);
   const [selectedJob, setSelectedJob] = useState('');
   const [modalFlag, setModalFlag] = useState(false);
   const [forModalJobList, setForModalJobList] = useState([]);
+  const [text, setText] = useState('');
 
   const fetchData = async () => {
     const response = await Axios.get(
       `https://jobs.github.com/positions.json?search=${selectedLanguage.toLowerCase()}`,
     );
     setData(response.data);
+    setDisplayData(response.data);
+  };
+
+  const filterJobs = () => {
+    const filteredJobList = data.filter((item) => {
+      const searchValue = text.toUpperCase();
+      const jobTitle = item.title.toUpperCase();
+
+      return jobTitle.indexOf(searchValue) > -1;
+    });
+    setDisplayData(filteredJobList);
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    filterJobs();
+  }, [text]);
 
   function onJobSelect(job) {
     setModalFlag(true);
@@ -48,7 +65,7 @@ const Jobs = (props) => {
     savedJobList.findIndex((a) => a.id == selectedJob.id) !== -1
       ? null
       : (savedJobList = [...savedJobList, selectedJob]);
-    setForModalJobList(savedJobList)
+    setForModalJobList(savedJobList);
 
     AsyncStorage.setItem('@SAVED_JOBS', JSON.stringify(savedJobList));
   };
@@ -64,7 +81,8 @@ const Jobs = (props) => {
           }}>
           JOBS FOR {selectedLanguage.toUpperCase()}
         </Text>
-        <FlatList data={data} renderItem={renderJobs} />
+        <SearchBar place="Search a job..." changeText={(x) => setText(x)} />
+        <FlatList data={displayData} renderItem={renderJobs} />
 
         <TouchableOpacity
           style={{
@@ -77,6 +95,19 @@ const Jobs = (props) => {
           }}
           onPress={() => props.navigation.navigate('SavedJobs')}>
           <Text style={{color: 'white'}}>Show Saved Jobs</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{
+            backgroundColor: 'blue',
+            padding: 10,
+            borderRadius: 10,
+            position: 'absolute',
+            bottom: 10,
+            left: 10,
+          }}
+          onPress={() => props.navigation.goBack()}>
+          <Text style={{color: 'white'}}>Back</Text>
         </TouchableOpacity>
 
         <Modal

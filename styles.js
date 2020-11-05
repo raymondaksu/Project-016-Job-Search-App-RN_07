@@ -52,3 +52,15 @@ export const jobs = StyleSheet.create({
     height: Dimensions.get('window').height / 3,
   },
 });
+
+export const searchBar = StyleSheet.create({
+  container: {
+    borderRadius: 10,
+    backgroundColor: '#eceff1',
+    marginHorizontal: 10,
+  },
+  text: {
+    color: 'black',
+    fontSize: 20,
+  },
+});

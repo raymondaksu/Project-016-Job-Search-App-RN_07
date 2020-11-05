@@ -59,7 +59,7 @@ const SavedJobs = (props) => {
           borderRadius: 10,
           position: 'absolute',
           bottom: 10,
-          right: 10,
+          left: 10,
         }}
         onPress={() => props.navigation.goBack()}>
         <Text style={{color: 'white'}}>Back</Text>
