@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {SafeAreaView, Text, View, ScrollView} from 'react-native';
+import {SafeAreaView, Text, View, ScrollView, Image} from 'react-native';
 import {introduction} from '../styles';
 import {TopicItem} from '../components';
 
@@ -53,21 +53,39 @@ const topics = [
 ];
 
 const Introduction = (props) => {
-
-function selectLanguage(lang) {
-  props.navigation.navigate('Jobs', { selectedLanguage: lang })
-}
+  function selectLanguage(lang) {
+    props.navigation.navigate('Jobs', {selectedLanguage: lang});
+  }
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#eceff1'}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#64bdd1'}}>
       <View style={{flex: 1}}>
         <View style={introduction.banner}>
-          <Text style={introduction.bannerText}>Aradığınız dili seçin</Text>
+          <Text style={introduction.bannerText}>
+            Choose A Programming Language
+          </Text>
+        </View>
+        <View style={introduction.image}>
+          <Image
+            source={require('../assets/programming-language-icon-12.png')}
+            style={{
+              width: '60%',
+              height: '100%',
+              alignSelf: 'center',
+              padding: 15,
+            }}
+          />
         </View>
 
-        <ScrollView horizontal contentContainerStyle={{alignItems: 'center'}}>
+        <ScrollView horizontal contentContainerStyle={{alignItems: 'stretch'}}>
           {topics.map((t) => {
-            return <TopicItem key={t.id} item={t} onSelect={() => selectLanguage(t.name)} />;
+            return (
+              <TopicItem
+                key={t.id}
+                item={t}
+                onSelect={() => selectLanguage(t.name)}
+              />
+            );
           })}
         </ScrollView>
       </View>

@@ -71,7 +71,7 @@ const Jobs = (props) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: '#64bdd1'}}>
       <View style={{flex: 1}}>
         <Text
           style={{
